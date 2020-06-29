@@ -21,12 +21,19 @@ unpad = lambda s : s[0:-ord(s[-1])]
 EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
 DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).rstrip(PADDING)
 
-def WierszGodzinowyZetonu(pietro):
-    return tydzien_pon[pietro]
+def WierszGodZetonu(pietro):
+    wiersz_godz={
+        0:tydzien_pon[pietro],
+        1:tydzien_wto[pietro],
+        2:tydzien_sro[pietro],
+        3:tydzien_czw[pietro],
+        4:tydzien_ptk[pietro]
+    }
+    return wiersz_godz.get(datetime.datetime.today().weekday(),"ww")
 # ---------------------------------------------------------------------------------------------
 execfile('config/qr-l-master.py')
 pietro="5b"
-zeton=pietro+'q'+id_zetonu+'q'+data_zetonu+'q'+WierszGodzinowyZetonu(pietro)
+zeton=pietro+'q'+id_zetonu+'q'+data_zetonu+'q'+WierszGodZetonu(pietro)
 print 'debug +++++++++++++++++'+zeton
 ciag_dla_qr = base64.b64encode(''.join(tab_kod[c] if c in tab_kod else c for c in zeton))
 
