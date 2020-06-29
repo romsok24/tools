@@ -1,5 +1,7 @@
 # coding=UTF-8
 # Program do generowania elektronicznych żetonów śniadaniowych
+# Zastępuje on dotychczasowe żetony fizyczne i usprawnia proces obsługi dopłat śniadaniowych
+# Ta aplikacja pracuje po stronie serwera natomiast po stronie dostawcy zestawów lunchowych pracuje aplikacja Android
 # Autor: Roman.Sokalski
 # czerwiec 2020
 # ---------------------------------------------------------------------------------------------
