@@ -2,7 +2,7 @@
 # Program do generowania elektronicznych żetonów śniadaniowych
 # Zastępuje on dotychczasowe żetony fizyczne i usprawnia proces obsługi dopłat śniadaniowych
 # Ta aplikacja pracuje po stronie serwera natomiast po stronie dostawcy zestawów lunchowych pracuje aplikacja Android
-# Autor: Roman.Sokalski
+# Autor: Roman.Sokalski@mybenefit.pl
 # czerwiec 2020
 # ---------------------------------------------------------------------------------------------
 
@@ -10,9 +10,6 @@ import configparser, qrcode
 from Crypto.Cipher import AES
 import random, string, datetime
 import base64, os
-
-config_qrl = configparser.ConfigParser()
-config_qrl.read('config/qr-l-master.ini')
 
 def randomString(stringLength=8):
     letters = string.ascii_lowercase
@@ -23,19 +20,23 @@ unpad = lambda s : s[0:-ord(s[-1])]
 
 EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
 DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).rstrip(PADDING)
+
+def WierszGodzinowyZetonu(pietro):
+    return tydzien_pon[pietro]
 # ---------------------------------------------------------------------------------------------
 execfile('config/qr-l-master.py')
-zeton=pietro_zetonu[0]+'q'+id_zetonu+'q'+data_zetonu+'q'+wiersz_godz_zetonu[1]
+pietro="5b"
+zeton=pietro+'q'+id_zetonu+'q'+data_zetonu+'q'+WierszGodzinowyZetonu(pietro)
 print 'debug +++++++++++++++++'+zeton
 ciag_dla_qr = base64.b64encode(''.join(tab_kod[c] if c in tab_kod else c for c in zeton))
 
 print "Program do generowania elektronicznych żetonów śniadaniowych. Wersja: " + wersja_qrLM + "\n--------------------------------------------------------------------------------"
 
-# nie współpracuje z kodularem
+# AES nie współpracuje z kodularem
 # szyfr = AES.new(klucz, AES.MODE_ECB)
 # ciag_dla_qr=EncodeAES(szyfr,zeton)
 
-print 'debug +++++++++++++++++'+"Ciąg dla kodu QR: " + ciag_dla_qr
+# print 'debug +++++++++++++++++'+"Ciąg dla kodu QR: " + ciag_dla_qr
 
 qr = qrcode.QRCode(
     version=1,
