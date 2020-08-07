@@ -60,5 +60,3 @@ if (options.contsize):
     remove("kontener.img")
     subprocess.check_call(["/sbin/mkfs.ext4", "./kontener_enc.img"])
     os.system('/bin/mount -o loop ./kontener_enc.img /mnt/test')
-    # subprocess.check_call(["/bin/mount -o loop","./kontener_enc.img","/mnt/test"], shell=True)
-    # mount("./kontener_enc.img","/mnt/test", "-o loop")
