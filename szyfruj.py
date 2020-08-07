@@ -18,9 +18,9 @@ parser.add_option('-e', '--encrypt',
     action="store", dest="encrypt",
     help="szyfruje wskazany plik i zapisuje z rozszerzeniem .enc") 
 
-parser.add_option('-d', '--decrypt',
+parser.add_option('-d', '--decryptmount',
     action="store", dest="decrypt",
-    help="odszyfruje wskazany plik i zapisuje z rozszerzeniem .enc") 
+    help="odszyfruje wskazany plik i montuje z niego fs") 
 
 parser.add_option('-c', '--create-container',
     action="store", dest="contsize",
@@ -41,22 +41,23 @@ if (options.encrypt):
             pyAesCrypt.encryptStream(fIn, fOut, haselko, bufferSize)
 #---------------------------------------------------------------------------------------------------------
 if (options.decrypt):
-    encFileSize = stat("data.txt.enc").st_size
-    with open("data.txt.enc", "rb") as fIn:
-        with open("odszyfr.txt", "wb") as fOut:
+    encFileSize = stat("kontener_enc.img").st_size
+    with open("kontener_enc.img", "rb") as fIn:
+        with open("kontener.img", "wb") as fOut:
             try:
                 pyAesCrypt.decryptStream(fIn, fOut, haselko, bufferSize, encFileSize)
             except ValueError:
                 print("\nNieudane odszyfrowanie. Czy podałeś prawidłowe hasło?")
+    os.system('/bin/mount -o loop ./kontener.img /mnt/test')
 #---------------------------------------------------------------------------------------------------------
 if (options.contsize):
     with open('kontener.img', 'wb') as bigfile:
         bigfile.seek(int(options.contsize) * 1024 * 1024 -1)
         bigfile.write(b'0')
         bigfile.seek(0)
+    subprocess.check_call(["/sbin/mkfs.ext4", "./kontener.img"])
     with open("kontener.img", "rb") as fIn:
         with open("kontener_enc.img", "wb") as fOut:
             pyAesCrypt.encryptStream(fIn, fOut, haselko, bufferSize)
     remove("kontener.img")
-    subprocess.check_call(["/sbin/mkfs.ext4", "./kontener_enc.img"])
-    os.system('/bin/mount -o loop ./kontener_enc.img /mnt/test')
+#---------------------------------------------------------------------------------------------------------
