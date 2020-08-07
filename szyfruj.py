@@ -1,5 +1,6 @@
 # coding=UTF-8
 # Program szyfrujący kontener plikowy i montujący go jako system plików
+# Still in Beta version !
 
 import optparse, getpass, pyAesCrypt, subprocess, os
 from os import stat, remove
