@@ -1,0 +1,3 @@
+# Below code will migrate all projects from one Gitlab instnce (<first_gl_instnce>) to the second (<second_gl_instnce>). All within the given ( <gl_group_nmumber> ) Gitlab group
+
+for repo in $(curl "http://<first_gl_instnce>/api/v4/groups/<gl_group_nmumber>?private_token=<token_1st_glwith_ro_perms>" | jq '.projects[].http_url_to_repo' | tr -d '"'); do echo $(echo $repo | sed 's/http:\/\//http:\/\/oauth2:<token_2nd_gl_with_rw_perms>@/g' | tr -d '\n') | xargs -L1 git clone  && nazwa=$(echo $repo | awk -F '/' '{ print $NF }' | rev | cut -c5- | rev ) ; cd $nazwa ; git push --set-upstream https://oauth2:jUdW53T-1MtGajQKcUZz@<second_gl_instnce>/<second_gl_group_name>/$(echo $repo | awk -F '/' '{ print $NF }'); cd .. ; rm -fr $nazwa; done;
