@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Installation: copy it to /usr/local/bin/ or any other folder in your $PATH
+# Usage: kubectl rosdebug kube-system
+
+if [[ "$1" == "" ]]
+then
+        echo "Uruchamiam pod w defaultowym namespace"
+        /usr/local/bin/kubectl run -it --rm --restart=Never --image=infoblox/dnstools:latest rosdebug -n default
+        exit 0
+else
+        echo "Uruchamiam pod w namespace $1"
+        /usr/local/bin/kubectl run -it --rm --restart=Never --image=infoblox/dnstools:latest rosdebug -n $1
+        exit 0
+fi
