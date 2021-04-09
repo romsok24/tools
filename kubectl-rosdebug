@@ -26,6 +26,6 @@ do
   esac
 done
 
-echo "Podpinam pod debugowy do poda $targetpod w namespace $ns"
+echo  -e "\033[0;36mPodpinam pod debugowy do poda $targetpod w namespace $ns \033[0m"
 /usr/local/bin/kubectl run -it --rm --restart=Never --image=$ktoryimage rosdebug -n $ns
 # --target=$targetpod
