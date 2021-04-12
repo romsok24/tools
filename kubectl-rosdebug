@@ -1,10 +1,16 @@
-# cat /usr/local/bin/kubectl-rosdebug
 #!/bin/bash
 # Installation: copy it to /usr/local/bin/ or any other folder in your $PATH
 # Usage: kubectl rosdebug kube-system
 
 #ktoryimage="infoblox/dnstools:latest"
+#ktoryimage="nicolaka/netshoot"
 ktoryimage="ubuntu:18.04"
+#ktoryimage="gcr.io/google-containers/busybox"
+
+if [[ $# -eq 0 ]]; then
+  echo "Użycie:  kubectl rosdebug -n <namespace> -t <target_pod>"
+  exit 0
+fi
 
 while [[ $# -gt 0 ]]
 do
@@ -26,6 +32,7 @@ do
   esac
 done
 
-echo  -e "\033[0;36mPodpinam pod debugowy do poda $targetpod w namespace $ns \033[0m"
+klaster=$(kubectl config get-contexts | grep '*' | awk '{print $2}')
+echo  -e "\033[0;36mPodpinam pod debugowy do poda $targetpod w namespace $ns klastra $klaster \033[0m"
 /usr/local/bin/kubectl run -it --rm --restart=Never --image=$ktoryimage rosdebug -n $ns
 # --target=$targetpod
