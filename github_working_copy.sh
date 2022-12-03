@@ -19,6 +19,7 @@ git rm -rf .
 
 # Create empty commit
 echo "Working code copy done at $TODAY" > info.md && git add info.md && git commit -m "Working code copy done at $TODAY"
+echo -e "info.md\n" >> .gitignore
 
 # Merge the old branch to new one, using a squash
 git merge --squash $CURRENT_BRANCH --allow-unrelated-histories
